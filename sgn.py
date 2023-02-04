@@ -1,7 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
 
-# In[1]:
 
 
 import matplotlib.pyplot as plt
@@ -17,66 +14,30 @@ import pandas as pd
 import numpy as np
 
 
-
-# In[2]:
-
-
 train = pd.read_csv("sign_mnist_train.csv")
 test = pd.read_csv("sign_mnist_test.csv")
 
-
-# In[3]:
-
-
 train.head()
-
-
-# In[4]:
-
 
 test.head()
 
-
-# In[5]:
-
-
 # Get our labels
 labels = train['label'].values
-
-
-# In[6]:
-
 
 # view the unique labels
 unique_val = np.array(labels)
 np.unique(unique_val)
 
-
-# In[7]:
-
-
 plt.figure(figsize = (18,8))
 sns.countplot(x = labels)
 
-
-# In[8]:
-
-
 # drop training labels from our training data so we can seperate it
 train.drop('label', axis = 1, inplace=True)
-
-
-# In[9]:
-
 
 # Extract the image data from each row in our csv
 images = train.values
 images = np.array([np.reshape(i, (28, 28)) for i in images])
 images = np.array([i.flatten() for i in images])
-
-
-# In[10]:
-
 
 # encode our labels
 from sklearn.preprocessing import LabelBinarizer
@@ -84,42 +45,22 @@ from sklearn.preprocessing import LabelBinarizer
 label_binrizer = LabelBinarizer()
 labels = label_binrizer.fit_transform(labels)
 
-
-# In[11]:
-
-
 # view our labels
 labels
-
-
-# In[12]:
-
 
 # inspect an image
 index = 2
 print(labels[index])
 plt.imshow(images[index].reshape(28, 28))
 
-
-# In[17]:
-
-
 # split our  data into x_train, x_test, y_train, y_test
 from sklearn.model_selection import train_test_split
 
 x_train, x_test, y_train, y_test = train_test_split(images, labels, test_size = 0.3, random_state = 101)
 
-
-# In[18]:
-
-
 # scale our images
 x_train = x_train / 255
 x_test = x_test / 255
-
-
-# In[19]:
-
 
 # Reshape them into the size required by TF and keras
 
@@ -127,10 +68,6 @@ x_train = x_train.reshape(x_train.shape[0], 28, 28, 1)
 x_test = x_test.reshape(x_test.shape[0], 28, 28, 1)
 
 plt.imshow(x_train[0].reshape(28,28))
-
-
-# In[20]:
-
 
 datagen = ImageDataGenerator(
         featurewise_center=False,  # set input mean to 0 over the dataset
@@ -147,15 +84,7 @@ datagen = ImageDataGenerator(
 
 datagen.fit(x_train)
 
-
-# In[21]:
-
-
 learning_rate_reduction = ReduceLROnPlateau(monitor='val_accuracy', patience = 2, verbose=1,factor=0.5, min_lr=0.00001)
-
-
-# In[22]:
-
 
 model = Sequential()
 model.add(Conv2D(75 , (3,3) , strides = 1 , padding = 'same' , activation = 'relu' , input_shape = (28,28,1)))
@@ -175,21 +104,9 @@ model.add(Dense(units = 24 , activation = 'softmax'))
 model.compile(optimizer = 'adam' , loss = 'categorical_crossentropy' , metrics = ['accuracy'])
 model.summary()
 
-
-# In[23]:
-
-
 history = model.fit(datagen.flow(x_train,y_train, batch_size = 128) ,epochs = 20 , validation_data = (x_test, y_test) , callbacks = [learning_rate_reduction])
 
-
-# In[24]:
-
-
 model.save('smnist.h5')
-
-
-# In[25]:
-
 
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
@@ -322,7 +239,7 @@ cap.release()
 cv2.destroyAllWindows()
 
 
-# In[ ]:
+
 
 
 
