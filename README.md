@@ -9,6 +9,7 @@ Two popular live video processing libraries known as Mediapipe and Open-CV, we c
 #matplotlib
 #numpy 
 #open-cv
+#tensorflow
 #keras
 #mediapipe
-#seaborn
+#sklearn
