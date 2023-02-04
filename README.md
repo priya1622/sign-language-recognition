@@ -6,6 +6,7 @@ Many large training datasets for Sign Language are available on Kaggle, a popula
 Two popular live video processing libraries known as Mediapipe and Open-CV, we can take webcam input and run our previously developed model on real time video stream.
 ## packages and tools required
 #pandas
+#matplotlib
 #numpy 
 #open-cv
 #keras
